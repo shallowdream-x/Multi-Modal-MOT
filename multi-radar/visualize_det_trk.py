@@ -18,6 +18,7 @@ detection2_file = '/mnt/d/Nutstore/Nutstore/try/MOT/Multi-Modal-MOT/multi-radar/
 detection3_file = '/mnt/d/Nutstore/Nutstore/try/MOT/Multi-Modal-MOT/multi-radar/detection3.json'
 detection4_file = '/mnt/d/Nutstore/Nutstore/try/MOT/Multi-Modal-MOT/multi-radar/detection4.json'
 detection_all_file = '/mnt/d/Nutstore/Nutstore/try/MOT/Multi-Modal-MOT/multi-radar/detection_all.json'
+detection_cluster_file = '/mnt/d/Nutstore/Nutstore/try/MOT/Multi-Modal-MOT/multi-radar/detection_all_cluster.json'
 track_file = '/mnt/d/Nutstore/Nutstore/try/MOT/Multi-Modal-MOT/multi-radar/track.json'
 
 isGPS = True
@@ -227,8 +228,11 @@ def visualize_gps(index, hz):
     elif index == 3:
         with open(detection3_file) as f:
             data = json.load(f)
-    elif index ==4:
+    elif index == 4:
         with open(detection4_file) as f:
+            data = json.load(f)
+    elif index == 5:
+        with open(detection_cluster_file) as f:
             data = json.load(f)
     max_marker_size = 0
     for i in range(len(data)):
@@ -398,6 +402,6 @@ if __name__ == '__main__':
     rospy.init_node('visulize', anonymous=True)
 
     if isGPS:
-        visualize_gps(index=0, hz=9)
+        visualize_gps(index=5, hz=9)
     else:
         visualize_position(index=4, hz=9)

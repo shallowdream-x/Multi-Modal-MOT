@@ -57,11 +57,11 @@ def merge_multi_radar():
     print("write json finished!")
 
 
-def cluster():
+def cluster(output=True):
     detection_all_file = '/mnt/d/Nutstore/Nutstore/try/MOT/Multi-Modal-MOT/multi-radar/detection_all.json'
     output_file = '/mnt/d/Nutstore/Nutstore/try/MOT/Multi-Modal-MOT/multi-radar/detection_all_cluster.json'
     unuse_detection_all = []
-    thre = 2
+    thre = 4
     with open(detection_all_file) as f:
         data = json.load(f)
     for i in range(len(data)):
@@ -77,12 +77,7 @@ def cluster():
                 cost[j][k] = np.sqrt(np.square(lat_j - lat_k) + np.square(lon_j - lon_k))
                 if cost[j][k] < thre:
                     unuse_detection_tmp.append((j, k))
-                    if i == 0:
-                        print("the ", j, "th row", k, "th column has the cost lower than thred")
-                        print("cost is ", cost[j][k])
             if len(unuse_detection_tmp) > 1:
-                if i == 0:
-                    print("the ", j, "th row has more than one cost lower than thred")
                 unuse_detection.append(unuse_detection_tmp[0][0])
                 for m in range(len(unuse_detection_tmp)-1):
                     unuse_detection.append(unuse_detection_tmp[m][1])
@@ -91,10 +86,24 @@ def cluster():
             else:
                 continue
         unuse_detection_all.append(unuse_detection)
-        if i == 0:
-            print(cost.shape)
-            # print(cost)
-            print(unuse_detection_all)
+    if (output):
+        data_cluster = {}
+        for i in range(len(data)):
+            sample = {}
+            detection_cluster = [x for x in range(len(data["sample"+str(i)])) if x not in unuse_detection_all[i]]
+            for j in range(len(data["sample"+str(i)])-len(unuse_detection_all[i])):
+                sample[str(j)] = data["sample"+str(i)][str(detection_cluster[j])]
+            data_cluster["sample"+str(i)] = sample
+            # if i == 0:
+            #     print(len(detection_cluster))
+            #     print(len(data["sample"+str(i)])-len(unuse_detection_all[i]))
+            #     print(range(len(data["sample"+str(i)])))
+            #     print(unuse_detection_all[i])
+            #     print(detection_cluster)
+        with open(output_file, 'w') as f:
+            json.dump(data_cluster, f)
+
+    return unuse_detection_all
 
     
 
