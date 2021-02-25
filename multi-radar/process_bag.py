@@ -82,8 +82,11 @@ class process_bag(object):
     def __del__(self):
         for i in range(155, 185):
             del self.data1["sample"+str(i)]
+        for i in range(155, 185):
             del self.data2["sample"+str(i)]
+        for i in range(155, 187):
             del self.data3["sample"+str(i)]
+        for i in range(155, 186):
             del self.data4["sample"+str(i)]
         with open(json_filename1, 'w') as f:
             json.dump(self.data1, f)
