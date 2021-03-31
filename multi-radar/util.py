@@ -108,7 +108,7 @@ def cluster(output=True):
     
 
 if __name__ == '__main__':
-    cluster()  
+    merge_multi_radar()  
     
 
             

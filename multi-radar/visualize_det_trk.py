@@ -21,7 +21,7 @@ detection_all_file = '/mnt/d/Nutstore/Nutstore/try/MOT/Multi-Modal-MOT/multi-rad
 detection_cluster_file = '/mnt/d/Nutstore/Nutstore/try/MOT/Multi-Modal-MOT/multi-radar/detection_all_cluster.json'
 track_file = '/mnt/d/Nutstore/Nutstore/try/MOT/Multi-Modal-MOT/multi-radar/track.json'
 
-isGPS = True
+isGPS = False
 
 def signal_handling(signum, frame):
     global terminate                         
@@ -40,6 +40,8 @@ def visualize_position(index, hz):
     text_pub = rospy.Publisher('radartext', MarkerArray, queue_size=5)
     arrow_pub = rospy.Publisher('radararrow', MarkerArray, queue_size=5)
     rate = rospy.Rate(hz)
+    with open(track_file) as track_f:
+        track_data = json.load(track_f)
     if index == 1:
         with open(detection1_file) as f:
             data = json.load(f)
@@ -111,8 +113,8 @@ def visualize_position(index, hz):
             text_marker.scale.y = 1
             text_marker.scale.z = 2
             # text_marker.text = type[data["sample"+str(i)][str(j)]['type']]
-            text_marker.text = "det" + str(j)
-            # text_marker.text = str(track_data["sample"+str(i)][str(j)]['id'])
+            # text_marker.text = "det" + str(j)
+            text_marker.text = str(track_data["sample"+str(i)][str(j)]['id'])
             radar1text.markers.append(text_marker)
 
             arrow_marker = Marker()
@@ -404,4 +406,4 @@ if __name__ == '__main__':
     if isGPS:
         visualize_gps(index=5, hz=9)
     else:
-        visualize_position(index=4, hz=9)
+        visualize_position(index=1, hz=9)
